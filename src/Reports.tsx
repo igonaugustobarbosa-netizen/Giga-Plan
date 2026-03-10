@@ -33,6 +33,7 @@ export const Reports: React.FC = () => {
         scale: 2,
         useCORS: true,
         logging: false,
+        backgroundColor: '#ffffff',
       });
       
       const imgData = canvas.toDataURL('image/png');
@@ -125,35 +126,35 @@ export const Reports: React.FC = () => {
 
       <div 
         ref={reportRef}
-        className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 print:shadow-none print:border-none print:p-0"
+        className="bg-[#ffffff] text-[#111827] rounded-xl border border-[#f3f4f6] p-8 print:shadow-none print:border-none print:p-0"
       >
-        <div className="text-center mb-8 pb-8 border-b border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-900">Giga Plan</h2>
-          <p className="text-gray-500 mt-2">Relatório de Serviços Concluídos</p>
-          <p className="text-sm text-gray-400 mt-1">
+        <div className="text-center mb-8 pb-8 border-b border-[#e5e7eb]">
+          <h2 className="text-3xl font-bold text-[#111827]">Giga Plan</h2>
+          <p className="text-[#6b7280] mt-2">Relatório de Serviços Concluídos</p>
+          <p className="text-sm text-[#9ca3af] mt-1">
             Período: {format(parseISO(startDate), 'dd/MM/yyyy')} a {format(parseISO(endDate), 'dd/MM/yyyy')}
           </p>
         </div>
 
         {filteredRecords.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-[#6b7280]">
             Nenhum serviço concluído encontrado para o período selecionado.
           </div>
         ) : (
           <div className="space-y-8">
             {filteredRecords.map((record) => (
-              <div key={record.id} className="border border-gray-200 rounded-lg p-6 break-inside-avoid">
+              <div key={record.id} className="border border-[#e5e7eb] rounded-lg p-6 break-inside-avoid">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                      <FileText className="w-5 h-5 text-blue-600" />
+                    <h3 className="text-xl font-bold text-[#111827] flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-[#2563eb]" />
                       {record.equipmentName}
                     </h3>
-                    <p className="text-sm font-medium text-blue-600 mt-1">
+                    <p className="text-sm font-medium text-[#2563eb] mt-1">
                       {record.category} - {record.type}
                     </p>
                   </div>
-                  <div className="text-right text-sm text-gray-500">
+                  <div className="text-right text-sm text-[#6b7280]">
                     <p>Início: {format(parseISO(record.startDate), 'dd/MM/yyyy')} às {record.startTime}</p>
                     <p>Fim: {format(parseISO(record.endDate), 'dd/MM/yyyy')} às {record.endTime}</p>
                   </div>
@@ -161,16 +162,16 @@ export const Reports: React.FC = () => {
                 
                 <div className="mt-4 space-y-4">
                   <div>
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">Descrição dos Trabalhos</h4>
-                    <p className="text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <h4 className="text-sm font-semibold text-[#111827] uppercase tracking-wider mb-2">Descrição dos Trabalhos</h4>
+                    <p className="text-[#374151] whitespace-pre-wrap bg-[#f9fafb] p-4 rounded-lg border border-[#f3f4f6]">
                       {record.description}
                     </p>
                   </div>
                   
                   {record.partsList && (
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">Peças Utilizadas</h4>
-                      <p className="text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-100">
+                      <h4 className="text-sm font-semibold text-[#111827] uppercase tracking-wider mb-2">Peças Utilizadas</h4>
+                      <p className="text-[#374151] whitespace-pre-wrap bg-[#f9fafb] p-4 rounded-lg border border-[#f3f4f6]">
                         {record.partsList}
                       </p>
                     </div>
