@@ -31,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           <div className="bg-blue-600 p-2 rounded-lg text-white">
             <Settings className="w-6 h-6" />
           </div>
-          <h1 className="text-xl font-bold text-white tracking-tight">Giga Plan</h1>
+          <h1 className="text-xl font-bold text-white tracking-tight">GIGA Plan</h1>
         </div>
         
         <div className="relative">

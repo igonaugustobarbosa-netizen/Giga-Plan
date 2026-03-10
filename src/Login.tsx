@@ -33,7 +33,7 @@ export const Login: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         <div className="p-8 bg-slate-900 text-center">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Giga Plan</h1>
+          <h1 className="text-3xl font-bold text-white tracking-tight">GIGA Plan</h1>
           <p className="text-slate-400 mt-2">Sistema de Gestão de Manutenção</p>
         </div>
         

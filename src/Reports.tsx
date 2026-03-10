@@ -129,7 +129,7 @@ export const Reports: React.FC = () => {
         className="bg-[#ffffff] text-[#111827] rounded-xl border border-[#f3f4f6] p-8 print:shadow-none print:border-none print:p-0"
       >
         <div className="text-center mb-8 pb-8 border-b border-[#e5e7eb]">
-          <h2 className="text-3xl font-bold text-[#111827]">Giga Plan</h2>
+          <h2 className="text-3xl font-bold text-[#111827]">GIGA Plan</h2>
           <p className="text-[#6b7280] mt-2">Relatório de Serviços Concluídos</p>
           <p className="text-sm text-[#9ca3af] mt-1">
             Período: {format(parseISO(startDate), 'dd/MM/yyyy')} a {format(parseISO(endDate), 'dd/MM/yyyy')}

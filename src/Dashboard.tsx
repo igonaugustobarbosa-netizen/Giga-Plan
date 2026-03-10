@@ -30,7 +30,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard Giga Plan</h1>
+      <h1 className="text-2xl font-bold text-gray-900">Dashboard GIGA Plan</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
