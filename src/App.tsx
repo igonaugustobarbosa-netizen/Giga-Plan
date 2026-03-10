@@ -7,8 +7,10 @@ import React, { useState } from 'react';
 import { MaintenanceProvider } from './store';
 import { Sidebar } from './Sidebar';
 import { Dashboard } from './Dashboard';
-import { MaintenanceList } from './MaintenanceList';
+import { OSManager } from './OSManager';
+import { EquipmentHistory } from './EquipmentHistory';
 import { Reports } from './Reports';
+import { UserManager } from './UserManager';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,14 +19,14 @@ export default function App() {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard />;
-      case 'corretiva':
-        return <MaintenanceList category="Corretiva" />;
-      case 'preventiva':
-        return <MaintenanceList category="Preventiva" />;
       case 'os':
-        return <MaintenanceList category="Ordem de Serviço" />;
+        return <OSManager />;
+      case 'historico':
+        return <EquipmentHistory />;
       case 'relatorios':
         return <Reports />;
+      case 'usuarios':
+        return <UserManager />;
       default:
         return <Dashboard />;
     }

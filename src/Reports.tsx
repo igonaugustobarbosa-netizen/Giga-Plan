@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useMaintenance } from './store';
 import { format, parseISO, isWithinInterval } from 'date-fns';
-import { FileText, Download, Filter } from 'lucide-react';
+import { FileText, Download, Filter, Loader2 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export const Reports: React.FC = () => {
   const { records } = useMaintenance();
   const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-01'));
   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
   const [categoryFilter, setCategoryFilter] = useState('Todas');
+  const [isPrinting, setIsPrinting] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
 
   const filteredRecords = records.filter(record => {
     const recordDate = parseISO(record.startDate);
@@ -20,8 +24,45 @@ export const Reports: React.FC = () => {
     return isWithinDate && isCategoryMatch && record.status === 'Concluída';
   }).sort((a, b) => b.createdAt - a.createdAt);
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (!reportRef.current) return;
+    
+    setIsPrinting(true);
+    try {
+      const canvas = await html2canvas(reportRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = pdfHeight;
+      let position = 0;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pageHeight;
+
+      // Add subsequent pages if content is longer than one page
+      while (heightLeft >= 0) {
+        position = heightLeft - pdfHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      pdf.save(`relatorio-gigaplan-${format(new Date(), 'dd-MM-yyyy')}.pdf`);
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      alert('Ocorreu um erro ao gerar o PDF. Tente novamente.');
+    } finally {
+      setIsPrinting(false);
+    }
   };
 
   return (
@@ -30,10 +71,15 @@ export const Reports: React.FC = () => {
         <h1 className="text-2xl font-bold text-gray-900">Relatórios de Serviços</h1>
         <button
           onClick={handlePrint}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm font-medium"
+          disabled={isPrinting || filteredRecords.length === 0}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors shadow-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <Download className="w-5 h-5" />
-          Imprimir / PDF
+          {isPrinting ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Download className="w-5 h-5" />
+          )}
+          {isPrinting ? 'Gerando PDF...' : 'Imprimir / PDF'}
         </button>
       </div>
 
@@ -77,7 +123,10 @@ export const Reports: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 print:shadow-none print:border-none print:p-0">
+      <div 
+        ref={reportRef}
+        className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 print:shadow-none print:border-none print:p-0"
+      >
         <div className="text-center mb-8 pb-8 border-b border-gray-200">
           <h2 className="text-3xl font-bold text-gray-900">Giga Plan</h2>
           <p className="text-gray-500 mt-2">Relatório de Serviços Concluídos</p>

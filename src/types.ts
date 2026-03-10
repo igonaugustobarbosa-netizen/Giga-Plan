@@ -1,6 +1,14 @@
 export type MaintenanceCategory = 'Corretiva' | 'Preventiva' | 'Ordem de Serviço';
 export type MaintenanceType = 'Mecânica' | 'Elétrica' | 'Melhoria';
 export type MaintenanceStatus = 'Planejada' | 'Em Andamento' | 'Concluída';
+export type UserRole = 'Administrador' | 'Técnico' | 'Visualizador';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+}
 
 export interface MaintenanceRecord {
   id: string;
@@ -14,5 +22,16 @@ export interface MaintenanceRecord {
   description: string;
   partsList: string;
   status: MaintenanceStatus;
+  assignedTo?: string; // User ID
   createdAt: number;
 }
+
+export interface AppNotification {
+  id: string;
+  title: string;
+  message: string;
+  createdAt: number;
+  read: boolean;
+  type: 'info' | 'warning' | 'alert';
+}
+

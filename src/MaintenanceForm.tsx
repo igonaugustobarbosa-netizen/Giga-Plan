@@ -10,7 +10,7 @@ interface MaintenanceFormProps {
 }
 
 export const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ category, onClose, initialData }) => {
-  const { addRecord, updateRecord } = useMaintenance();
+  const { addRecord, updateRecord, users } = useMaintenance();
   
   const [formData, setFormData] = useState({
     equipmentName: '',
@@ -22,6 +22,7 @@ export const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ category, onCl
     description: '',
     partsList: '',
     status: 'Planejada' as MaintenanceStatus,
+    assignedTo: '',
   });
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ category, onCl
         description: initialData.description,
         partsList: initialData.partsList,
         status: initialData.status,
+        assignedTo: initialData.assignedTo || '',
       });
     }
   }, [initialData]);
@@ -55,6 +57,8 @@ export const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ category, onCl
     onClose();
   };
 
+  const technicians = users.filter(u => u.role === 'Técnico' || u.role === 'Administrador');
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -69,17 +73,33 @@ export const MaintenanceForm: React.FC<MaintenanceFormProps> = ({ category, onCl
         
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Equipamento</label>
-              <input
-                type="text"
-                name="equipmentName"
-                required
-                value={formData.equipmentName}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                placeholder="Ex: Torno CNC, Bomba D'água..."
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Equipamento</label>
+                <input
+                  type="text"
+                  name="equipmentName"
+                  required
+                  value={formData.equipmentName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  placeholder="Ex: Torno CNC, Bomba D'água..."
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Atribuído para (Técnico)</label>
+                <select
+                  name="assignedTo"
+                  value={formData.assignedTo}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
+                >
+                  <option value="">Nenhum</option>
+                  {technicians.map(tech => (
+                    <option key={tech.id} value={tech.id}>{tech.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
