@@ -34,7 +34,18 @@ export const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [users, setUsers] = useState<User[]>(() => {
     const saved = localStorage.getItem('gigaPlanUsers');
-    return saved ? JSON.parse(saved) : defaultUsers;
+    if (saved) {
+      const parsedUsers = JSON.parse(saved);
+      // Migrate old users that don't have a password
+      return parsedUsers.map((u: User) => {
+        if (!u.password) {
+          const defaultUser = defaultUsers.find(du => du.email === u.email);
+          return { ...u, password: defaultUser ? defaultUser.password : '123' };
+        }
+        return u;
+      });
+    }
+    return defaultUsers;
   });
 
   const [currentUser, setCurrentUser] = useState<User | null>(() => {

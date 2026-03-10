@@ -112,30 +112,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
 
         {showUserMenu && (
           <div className="absolute bottom-full left-6 mb-2 w-52 bg-slate-800 rounded-xl shadow-xl border border-slate-700 overflow-hidden z-50">
-            <div className="p-3 border-b border-slate-700 text-xs font-medium text-slate-400 uppercase tracking-wider">
-              Trocar Usuário (Teste)
-            </div>
-            <div className="max-h-48 overflow-y-auto">
-              {users.map(user => (
-                <button
-                  key={user.id}
-                  onClick={() => {
-                    setCurrentUser(user);
-                    setShowUserMenu(false);
-                    if (user.role !== 'Administrador' && activeTab === 'usuarios') {
-                      setActiveTab('dashboard');
-                    }
-                  }}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-700 transition-colors ${
-                    currentUser?.id === user.id ? 'text-blue-400 font-medium' : 'text-slate-300'
-                  }`}
-                >
-                  {user.name}
-                  <span className="block text-xs text-slate-500">{user.role}</span>
-                </button>
-              ))}
-            </div>
-            <div className="border-t border-slate-700 p-2">
+            {currentUser?.role === 'Administrador' && (
+              <>
+                <div className="p-3 border-b border-slate-700 text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  Trocar Usuário (Teste)
+                </div>
+                <div className="max-h-48 overflow-y-auto">
+                  {users.map(user => (
+                    <button
+                      key={user.id}
+                      onClick={() => {
+                        setCurrentUser(user);
+                        setShowUserMenu(false);
+                        if (user.role !== 'Administrador' && activeTab === 'usuarios') {
+                          setActiveTab('dashboard');
+                        }
+                      }}
+                      className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-700 transition-colors ${
+                        currentUser?.id === user.id ? 'text-blue-400 font-medium' : 'text-slate-300'
+                      }`}
+                    >
+                      {user.name}
+                      <span className="block text-xs text-slate-500">{user.role}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            <div className={`${currentUser?.role === 'Administrador' ? 'border-t border-slate-700' : ''} p-2`}>
               <button
                 onClick={() => {
                   setCurrentUser(null);

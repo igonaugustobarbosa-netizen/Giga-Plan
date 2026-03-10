@@ -19,9 +19,8 @@ export const Login: React.FC = () => {
       return;
     }
 
-    // Since we just added passwords, some users might not have one in localStorage.
-    // We'll allow login if password matches, or if user has no password set yet (for backward compatibility during testing).
-    const isPasswordCorrect = user.password === password || (!user.password && password === '123');
+    // Check if password matches
+    const isPasswordCorrect = user.password === password;
 
     if (isPasswordCorrect) {
       setCurrentUser(user);
