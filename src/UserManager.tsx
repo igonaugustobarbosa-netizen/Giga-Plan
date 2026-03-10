@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMaintenance } from './store';
 import { User, UserRole } from './types';
-import { Plus, Edit2, Trash2, Shield, Mail, User as UserIcon, X, Save } from 'lucide-react';
+import { Plus, Edit2, Trash2, Shield, Mail, User as UserIcon, X, Save, Lock } from 'lucide-react';
 
 export const UserManager: React.FC = () => {
   const { users, currentUser, addUser, updateUser, deleteUser } = useMaintenance();
@@ -137,6 +137,7 @@ const UserForm: React.FC<UserFormProps> = ({ onClose, initialData }) => {
     name: initialData?.name || '',
     email: initialData?.email || '',
     role: initialData?.role || 'Técnico' as UserRole,
+    password: initialData?.password || '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -146,10 +147,15 @@ const UserForm: React.FC<UserFormProps> = ({ onClose, initialData }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const dataToSave = { ...formData };
+    if (initialData && !dataToSave.password) {
+      delete dataToSave.password; // Keep existing password if empty
+    }
+    
     if (initialData) {
-      updateUser(initialData.id, formData);
+      updateUser(initialData.id, dataToSave);
     } else {
-      addUser(formData);
+      addUser(dataToSave);
     }
     onClose();
   };
@@ -195,6 +201,22 @@ const UserForm: React.FC<UserFormProps> = ({ onClose, initialData }) => {
                 onChange={handleChange}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 placeholder="email@gigaplan.com"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                name="password"
+                required={!initialData}
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                placeholder={initialData ? "Deixe em branco para manter a mesma" : "Senha do usuário"}
               />
             </div>
           </div>

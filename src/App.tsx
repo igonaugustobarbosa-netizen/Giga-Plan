@@ -4,16 +4,22 @@
  */
 
 import React, { useState } from 'react';
-import { MaintenanceProvider } from './store';
+import { MaintenanceProvider, useMaintenance } from './store';
 import { Sidebar } from './Sidebar';
 import { Dashboard } from './Dashboard';
 import { OSManager } from './OSManager';
 import { EquipmentHistory } from './EquipmentHistory';
 import { Reports } from './Reports';
 import { UserManager } from './UserManager';
+import { Login } from './Login';
 
-export default function App() {
+const AppContent: React.FC = () => {
+  const { currentUser } = useMaintenance();
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  if (!currentUser) {
+    return <Login />;
+  }
 
   const renderContent = () => {
     switch (activeTab) {
@@ -33,16 +39,22 @@ export default function App() {
   };
 
   return (
+    <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      
+      <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen print:ml-0 print:p-0 print:h-auto print:overflow-visible">
+        <div className="max-w-7xl mx-auto">
+          {renderContent()}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default function App() {
+  return (
     <MaintenanceProvider>
-      <div className="flex min-h-screen bg-slate-50 font-sans text-slate-900">
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen print:ml-0 print:p-0 print:h-auto print:overflow-visible">
-          <div className="max-w-7xl mx-auto">
-            {renderContent()}
-          </div>
-        </main>
-      </div>
+      <AppContent />
     </MaintenanceProvider>
   );
 }

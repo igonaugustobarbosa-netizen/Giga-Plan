@@ -21,9 +21,9 @@ interface MaintenanceContextType {
 const MaintenanceContext = createContext<MaintenanceContextType | undefined>(undefined);
 
 const defaultUsers: User[] = [
-  { id: '1', name: 'Admin', email: 'admin@gigaplan.com', role: 'Administrador' },
-  { id: '2', name: 'Técnico João', email: 'joao@gigaplan.com', role: 'Técnico' },
-  { id: '3', name: 'Visualizador Maria', email: 'maria@gigaplan.com', role: 'Visualizador' },
+  { id: '1', name: 'Admin', email: 'admin@gigaplan.com', role: 'Administrador', password: 'admin' },
+  { id: '2', name: 'Técnico João', email: 'joao@gigaplan.com', role: 'Técnico', password: '123' },
+  { id: '3', name: 'Visualizador Maria', email: 'maria@gigaplan.com', role: 'Visualizador', password: '123' },
 ];
 
 export const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -39,7 +39,7 @@ export const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('gigaPlanCurrentUser');
-    return saved ? JSON.parse(saved) : defaultUsers[0];
+    return saved ? JSON.parse(saved) : null;
   });
 
   const [notifications, setNotifications] = useState<AppNotification[]>(() => {
