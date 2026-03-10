@@ -9,7 +9,7 @@ export const Reports: React.FC = () => {
   const { records } = useMaintenance();
   const [startDate, setStartDate] = useState(format(new Date(), 'yyyy-MM-01'));
   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'));
-  const [categoryFilter, setCategoryFilter] = useState('Todas');
+  const [statusFilter, setStatusFilter] = useState('Todas');
   const [isPrinting, setIsPrinting] = useState(false);
   const reportRef = useRef<HTMLDivElement>(null);
 
@@ -19,9 +19,9 @@ export const Reports: React.FC = () => {
     const end = parseISO(endDate);
     
     const isWithinDate = isWithinInterval(recordDate, { start, end });
-    const isCategoryMatch = categoryFilter === 'Todas' || record.category === categoryFilter;
+    const isStatusMatch = statusFilter === 'Todas' || record.status === statusFilter;
     
-    return isWithinDate && isCategoryMatch && record.status === 'Concluída';
+    return isWithinDate && isStatusMatch;
   }).sort((a, b) => b.createdAt - a.createdAt);
 
   const handlePrint = async () => {
@@ -109,16 +109,16 @@ export const Reports: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white"
             >
               <option value="Todas">Todas</option>
-              <option value="Corretiva">Corretiva</option>
-              <option value="Preventiva">Preventiva</option>
-              <option value="Ordem de Serviço">Ordem de Serviço</option>
+              <option value="Planejada">Planejada</option>
+              <option value="Em Andamento">Em Andamento</option>
+              <option value="Concluída">Concluída</option>
             </select>
           </div>
         </div>
@@ -130,15 +130,20 @@ export const Reports: React.FC = () => {
       >
         <div className="text-center mb-8 pb-8 border-b border-[#e5e7eb]">
           <h2 className="text-3xl font-bold text-[#111827]">GIGA Plan</h2>
-          <p className="text-[#6b7280] mt-2">Relatório de Serviços Concluídos</p>
+          <p className="text-[#6b7280] mt-2">Relatório de Serviços</p>
           <p className="text-sm text-[#9ca3af] mt-1">
             Período: {format(parseISO(startDate), 'dd/MM/yyyy')} a {format(parseISO(endDate), 'dd/MM/yyyy')}
           </p>
+          {statusFilter !== 'Todas' && (
+            <p className="text-sm font-medium text-[#2563eb] mt-1">
+              Status: {statusFilter}
+            </p>
+          )}
         </div>
 
         {filteredRecords.length === 0 ? (
           <div className="text-center py-12 text-[#6b7280]">
-            Nenhum serviço concluído encontrado para o período selecionado.
+            Nenhum serviço encontrado para os filtros selecionados.
           </div>
         ) : (
           <div className="space-y-8">
