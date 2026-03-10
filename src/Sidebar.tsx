@@ -5,9 +5,11 @@ import { useMaintenance } from './store';
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
   const { currentUser, setCurrentUser, users, notifications, markNotificationAsRead } = useMaintenance();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -25,8 +27,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
   const visibleMenuItems = menuItems.filter(item => currentUser && item.roles.includes(currentUser.role));
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 h-screen flex flex-col fixed left-0 top-0 z-20 print:hidden">
-      <div className="p-6 border-b border-slate-800 flex items-center justify-between">
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-20 lg:hidden" 
+          onClick={() => setIsOpen(false)} 
+        />
+      )}
+      
+      <aside className={`w-64 bg-slate-900 text-slate-300 h-screen flex flex-col fixed left-0 top-0 z-30 print:hidden transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="p-6 border-b border-slate-800 flex items-center justify-between lg:flex hidden">
         <div className="flex items-center gap-3">
           <div className="bg-blue-600 p-2 rounded-lg text-white">
             <Settings className="w-6 h-6" />
@@ -34,7 +45,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           <h1 className="text-xl font-bold text-white tracking-tight">GIGA Plan</h1>
         </div>
         
-        <div className="relative">
+        <div className="relative lg:block hidden">
           <button 
             onClick={() => setShowNotifications(!showNotifications)}
             className="p-2 hover:bg-slate-800 rounded-full relative transition-colors"
@@ -80,7 +91,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
             return (
               <li key={item.id}>
                 <button
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setIsOpen(false);
+                  }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                     isActive
                       ? 'bg-blue-600/10 text-blue-400 font-medium'
@@ -155,5 +169,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
         )}
       </div>
     </aside>
+    </>
   );
 };
