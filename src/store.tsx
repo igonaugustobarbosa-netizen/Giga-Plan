@@ -7,7 +7,7 @@ interface MaintenanceContextType {
   users: User[];
   currentUser: User | null;
   notifications: AppNotification[];
-  addRecord: (record: Omit<MaintenanceRecord, 'id' | 'createdAt'>) => void;
+  addRecord: (record: Omit<MaintenanceRecord, 'id' | 'createdAt' | 'osNumber'>) => void;
   updateRecord: (id: string, record: Partial<MaintenanceRecord>) => void;
   deleteRecord: (id: string) => void;
   addUser: (user: Omit<User, 'id'>) => void;
@@ -131,11 +131,27 @@ export const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     );
   };
 
-  const addRecord = (record: Omit<MaintenanceRecord, 'id' | 'createdAt'>) => {
+  const addRecord = (record: Omit<MaintenanceRecord, 'id' | 'createdAt' | 'osNumber'>) => {
+    const currentYear = new Date().getFullYear();
+    const osRecordsThisYear = records.filter(r => r.osNumber?.startsWith(`OS-${currentYear}-`));
+    
+    let maxNumber = 0;
+    osRecordsThisYear.forEach(r => {
+      const match = r.osNumber?.match(/OS-\d{4}-(\d+)/);
+      if (match && match[1]) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNumber) maxNumber = num;
+      }
+    });
+    
+    const nextNumber = maxNumber + 1;
+    const osNumber = `OS-${currentYear}-${nextNumber.toString().padStart(4, '0')}`;
+
     const newRecord: MaintenanceRecord = {
       ...record,
       id: crypto.randomUUID(),
       createdAt: Date.now(),
+      osNumber,
     };
     setRecords((prev) => [...prev, newRecord]);
 

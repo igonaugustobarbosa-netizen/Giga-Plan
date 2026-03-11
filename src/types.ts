@@ -13,6 +13,7 @@ export interface User {
 
 export interface MaintenanceRecord {
   id: string;
+  osNumber?: string;
   category: MaintenanceCategory;
   equipmentName: string;
   startDate: string; // YYYY-MM-DD

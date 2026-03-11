@@ -87,7 +87,10 @@ export const Dashboard: React.FC = () => {
                       <AlertTriangle className="w-4 h-4" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-900">{alarm.equipmentName}</h3>
+                      <h3 className="font-medium text-gray-900">
+                        {alarm.osNumber && <span className="text-blue-600 mr-2">{alarm.osNumber}</span>}
+                        {alarm.equipmentName}
+                      </h3>
                       <p className="text-sm text-gray-500 mt-1">
                         {alarm.category} - {alarm.type}
                       </p>

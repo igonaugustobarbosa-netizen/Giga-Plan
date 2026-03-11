@@ -85,9 +85,16 @@ export const EquipmentHistory: React.FC = () => {
                     <div key={record.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-200 transition-colors">
                       <div className="flex justify-between items-start mb-3">
                         <div>
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-2">
-                            {record.category}
-                          </span>
+                          <div className="flex items-center gap-2 mb-2">
+                            {record.osNumber && (
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                                {record.osNumber}
+                              </span>
+                            )}
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              {record.category}
+                            </span>
+                          </div>
                           <div className="flex items-center gap-4 text-sm text-gray-600">
                             <span className="flex items-center gap-1.5">
                               <Calendar className="w-4 h-4 text-gray-400" />

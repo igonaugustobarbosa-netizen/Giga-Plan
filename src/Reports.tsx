@@ -153,6 +153,7 @@ export const Reports: React.FC = () => {
                   <div>
                     <h3 className="text-xl font-bold text-[#111827] flex items-center gap-2">
                       <FileText className="w-5 h-5 text-[#2563eb]" />
+                      {record.osNumber && <span className="text-[#2563eb]">{record.osNumber}</span>}
                       {record.equipmentName}
                     </h3>
                     <p className="text-sm font-medium text-[#2563eb] mt-1">

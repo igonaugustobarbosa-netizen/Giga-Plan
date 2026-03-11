@@ -99,6 +99,9 @@ export const MaintenanceList: React.FC<MaintenanceListProps> = ({ category }) =>
                   return (
                     <tr key={record.id} className="hover:bg-gray-50/50 transition-colors group">
                       <td className="px-6 py-4">
+                        {record.osNumber && (
+                          <div className="text-xs font-bold text-blue-600 mb-1">{record.osNumber}</div>
+                        )}
                         <div className="font-medium text-gray-900">{record.equipmentName}</div>
                         <div className="text-sm text-gray-500 truncate max-w-xs mt-1" title={record.description}>
                           {record.description}
